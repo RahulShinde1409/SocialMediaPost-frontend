@@ -8,11 +8,11 @@ export const loginUser = createAsyncThunk(
       console.log("📤 Sending login request:", { email, password });
 
       const res = await axioshttp.post("/login", { email, password }, {
-        withCredentials: true, // ✅ important if backend uses sessions
+        withCredentials: true, 
         headers: { "Content-Type": "application/json" },
       });
 
-      console.log("✅ Login response:", res.data);
+      console.log("Login response:", res.data);
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.data));

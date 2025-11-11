@@ -30,67 +30,82 @@ const Header = () => {
     return (
         <>
             <header className="absolute inset-x-0 top-0 z-50 bg-[#124559] h-[12%] sm:h-[15%]">
-                <nav
-                    aria-label="Global"
-                    className="flex items-center justify-between p-4 lg:px-8"
-                >
+               <nav
+  aria-label="Global"
+  className="flex items-center justify-between p-4 lg:px-8"
+>
+  {/* Left Section: Logo + Hamburger */}
+  <div className="flex items-center justify-start gap-3 flex-1">
+    {/* Hamburger icon — visible only on small screens */}
+    <button
+      type="button"
+      onClick={() => setMobileMenuOpen(true)}
+      className="inline-flex items-center justify-center rounded-md p-2.5 text-white lg:hidden"
+    >
+      <Bars3Icon aria-hidden="true" className="h-8 w-8" />
+    </button>
 
-                    <div className="flex items-center gap-2">
-                        <Link to="/view-post" className="flex items-center">
-                            <img
-                                alt="logo"
-                                src={logofeed}
-                                className="w-auto h-18 object-contain"
-                            />
-                        </Link>
-                    </div>
+    {/* Logo */}
+    <Link to="/view-post" className="flex items-center">
+      <img
+        alt="logo"
+        src={logofeed}
+        className="w-auto h-10 object-contain"
+      />
+    </Link>
+  </div>
 
+  {/* Center Section: Navigation links (visible only on large screens) */}
+  <div className="hidden lg:flex lg:gap-x-12 lg:flex-1 lg:justify-center">
+    {navigation.map((item) => (
+      <NavLink
+        key={item.name}
+        to={item.href}
+        className={({ isActive }) =>
+          isActive
+            ? "text-sm font-semibold text-lime-300"
+            : "text-sm font-semibold text-white"
+        }
+      >
+        {item.name}
+      </NavLink>
+    ))}
+  </div>
 
-                    <div className="hidden lg:flex lg:gap-x-12 lg:flex-1 lg:justify-center">
-                        {navigation.map((item) => (
-                            <NavLink
-                                key={item.name}
-                                to={item.href}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "text-sm font-semibold text-lime-300"
-                                        : "text-sm font-semibold text-white"
-                                }
-                            >
-                                {item.name}
-                            </NavLink>
-                        ))}
-                    </div>
+  {/* Right Section: Logout or Auth Links */}
+  <div className="flex justify-end flex-1">
+    {isLogged ? (
+      <button
+        className="flex items-center gap-2 text-white font-bold text-[14px] cursor-pointer"
+        onClick={handleLogout}
+      >
+        Logout <TbLogout className="text-[20px]" />
+      </button>
+    ) : (
+      <div className="hidden lg:flex lg:gap-x-4">
+        <Link
+          to="/admin"
+          className="text-sm font-semibold text-white hover:text-lime-200"
+        >
+          Admin
+        </Link>
+        <Link
+          to="/register"
+          className="text-sm font-semibold text-white hover:text-lime-200"
+        >
+          Register
+        </Link>
+        <Link
+          to="/login"
+          className="text-sm font-semibold text-white hover:text-lime-200"
+        >
+          Log in →
+        </Link>
+      </div>
+    )}
+  </div>
+</nav>
 
-
-                    <div className="flex lg:hidden">
-                        <button
-                            type="button"
-                            onClick={() => setMobileMenuOpen(true)}
-                            className="inline-flex items-center justify-center rounded-md p-2.5 text-white"
-                        >
-                            <Bars3Icon aria-hidden="true" className="h-8 w-8" />
-                        </button>
-                    </div>
-
-
-                    {isLogged ? (
-                        <button
-                            // className="hidden lg:block text-white font-bold text-[14px] cursor-pointer"
-                            className="flex items-center gap-2 text-white font-bold text-[14px] cursor-pointer"
-                            onClick={handleLogout}
-                        >
-                            Logout <TbLogout  className="text-[20px]"/>
-
-                        </button>
-                    ) : (
-                        <div className="hidden lg:flex lg:flex-1 lg:justify-center lg:gap-x-4">
-                            <Link to="/admin" className="text-sm font-semibold text-white hover:text-lime-200">Admin</Link>
-                            <Link to="/register" className="text-sm font-semibold text-white hover:text-lime-200">Register</Link>
-                            <Link to="/login" className="text-sm font-semibold text-white hover:text-lime-200">Log in →</Link>
-                        </div>
-                    )}
-                </nav>
 
 
 
