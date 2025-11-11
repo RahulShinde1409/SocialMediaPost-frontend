@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // ✅ Added — you were using navigate but never declared it
+  const navigate = useNavigate(); 
   const { message, success, error, loading } = useSelector(
     (state) => state.register
   );
@@ -24,27 +24,37 @@ export default function Register() {
       .required("Contact is required"),
   });
 
-  // ✅ include { setSubmitting } as 2nd param
+ 
   const handleSubmit = (values, { setSubmitting }) => {
-    const payload = {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-      contact: values.contact,
-    };
-
-    dispatch(register(payload))
-      .unwrap()
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((error) => {
-        console.error("Registration error:", error);
-      })
-      .finally(() => {
-        setSubmitting(false); // ✅ Now defined
-      });
+  const payload = {
+    name: values.name,
+    email: values.email,
+    password: values.password,
+    contact: values.contact,
   };
+
+  dispatch(register(payload))
+    .unwrap()
+    .then(() => {
+     
+      dispatch({
+        type: "register/setMessage",
+        payload: { message: "Register successfully ", success: true },
+      });
+
+      
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    })
+    .catch((error) => {
+      console.error("Registration error:", error);
+    })
+    .finally(() => {
+      setSubmitting(false);
+    });
+};
+
 
   useEffect(() => {
     if (message) {
@@ -67,7 +77,7 @@ export default function Register() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => ( // ✅ optional — if you want to disable button when submitting
+        {({ isSubmitting }) => ( 
           <Form className="p-12 rounded shadow-md w-96 bg-gray-800 mt-12">
             <h2 className="font-bold text-[24px] mb-4 text-center text-white">
               Register
