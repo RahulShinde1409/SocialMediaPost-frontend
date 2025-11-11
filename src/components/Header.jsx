@@ -50,7 +50,7 @@ const Header = () => {
       <img
         alt="logo"
         src={logofeed}
-        className="w-auto h-10 object-contain"
+        className="w-auto h-14 sm:h-16 lg:h-20 object-contain"
       />
     </Link>
   </div>
