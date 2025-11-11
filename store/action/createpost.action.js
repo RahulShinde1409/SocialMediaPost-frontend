@@ -1,26 +1,50 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axioshttp from "../../utils/axiosInterceptor";
 
+// export const createPost = createAsyncThunk(
+//   'posts/createPost',
+//   async (formData, { rejectWithValue }) => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       const response = await axioshttp.post('/add-post', formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//           Authorization: `Bearer ${token}`,
+//         },
+
+//       });
+//       console.log(response.data)
+//       return response.data;
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message || "Post Create Failed");
+//     }
+//   }
+// );
+
+
 export const createPost = createAsyncThunk(
-  'posts/createPost',
+  "posts/createPost",
   async (formData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axioshttp.post('/add-post', formData, {
+
+      const response = await axioshttp.post("/add-post", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
-
       });
-      console.log(response.data)
+
+      console.log("✅ Post created successfully:", response.data);
       return response.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Post Create Failed");
+    } catch (error) {
+      console.error("❌ Post creation failed:", error.response || error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to create post"
+      );
     }
   }
 );
-
 export const UserPosts = createAsyncThunk(
   "posts/fetchUserPosts",
   async (userId, thunkAPI) => {
