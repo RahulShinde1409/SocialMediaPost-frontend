@@ -31,7 +31,7 @@ const Header = () => {
           aria-label="Global"
           className="flex items-center justify-between px-5 py-3 md:px-10 lg:py-4"
         >
-          {/* Left Section: Logo + Hamburger */}
+          {/* Left Section: Hamburger + Logo (logo hidden on mobile) */}
           <div className="flex items-center gap-3 flex-1">
             {/* Hamburger icon (mobile only) */}
             <button
@@ -42,8 +42,11 @@ const Header = () => {
               <Bars3Icon aria-hidden="true" className="h-7 w-7" />
             </button>
 
-            {/* Logo */}
-            <Link to="/view-post" className="flex items-center gap-2">
+            {/* Logo (hidden on mobile) */}
+            <Link
+              to="/view-post"
+              className="hidden sm:flex items-center gap-2"
+            >
               <img
                 alt="logo"
                 src={logofeed}
@@ -114,12 +117,18 @@ const Header = () => {
         >
           <div className="fixed inset-0 z-40 bg-black/40" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl p-6 sm:max-w-sm">
-            <div className="flex items-center justify-between">
-              <img
-                src={logofeed}
-                alt="logo"
-                className="h-12 w-auto object-contain"
-              />
+            {/* Logo inside menu */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <img
+                  src={logofeed}
+                  alt="logo"
+                  className="h-12 w-auto object-contain"
+                />
+                <span className="text-lg font-semibold text-gray-800">
+                  Feed App
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
@@ -129,7 +138,7 @@ const Header = () => {
               </button>
             </div>
 
-            <div className="mt-6 space-y-2">
+            <div className="mt-4 space-y-2">
               {navigation.map((item) => (
                 <NavLink
                   key={item.name}
