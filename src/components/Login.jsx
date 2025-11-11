@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/action/login.action";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +9,9 @@ import { Link } from "react-router-dom";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading, error } = useSelector((state) => state.login);
+  const { loading, error } = useSelector((state) => state.login);
 
+  const [successMsg, setSuccessMsg] = useState("");
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -20,22 +22,27 @@ export default function Login() {
       .required("Password is required"),
   });
 
-
   const initialValues = { email: "", password: "" };
 
-
   const handleSubmit = (values, { setSubmitting }) => {
+    setSuccessMsg(""); // clear previous message
     dispatch(loginUser(values))
       .unwrap()
       .then((res) => {
-        console.log(res);
-        if (res.data?.role === "admin") {
-          navigate('/admin')
-        } else {
-          navigate("/view-post");
-        }
+        setSuccessMsg("Login successful ✅");
+
+        // navigate after a short delay
+        setTimeout(() => {
+          if (res.data?.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/view-post");
+          }
+        }, 1000);
       })
-      .catch(() => { })
+      .catch(() => {
+        setSuccessMsg(""); // no success message on error
+      })
       .finally(() => setSubmitting(false));
   };
 
@@ -54,22 +61,19 @@ export default function Login() {
           >
             {({ isSubmitting }) => (
               <Form className="space-y-5">
-
                 <div>
                   <label className="block text-sm text-gray-200">Email</label>
                   <Field
                     type="email"
                     name="email"
-                    className="mt-2 block w-full rounded-md border border-white  px-3 py-2 text-white"
+                    className="mt-2 block w-full rounded-md border border-white px-3 py-2 text-white"
                   />
                   <ErrorMessage
                     name="email"
-
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
 
                 <div>
                   <label className="block text-sm text-gray-200">Password</label>
@@ -85,9 +89,15 @@ export default function Login() {
                   />
                 </div>
 
+                {error && (
+                  <p className="text-red-500">
+                    {typeof error === "string" ? error : error.message}
+                  </p>
+                )}
 
-                {error && <p className="text-red-500">{typeof error === "string" ? error : error.message}</p>}
-
+                {successMsg && (
+                  <p className="text-green-500 font-medium">{successMsg}</p>
+                )}
 
                 <button
                   type="submit"
@@ -97,10 +107,15 @@ export default function Login() {
                   {loading ? "Signing in..." : "Sign in"}
                 </button>
               </Form>
-              
             )}
           </Formik>
-          <p className="text-white text-center mt-3">Don't have an account? <Link className="hover:text-blue-500" to="/register">Register</Link></p>
+
+          <p className="text-white text-center mt-3">
+            Don't have an account?{" "}
+            <Link className="hover:text-blue-500" to="/register">
+              Register
+            </Link>
+          </p>
         </div>
       </div>
     </>
