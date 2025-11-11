@@ -1,23 +1,26 @@
-import { createAsyncThunk} from "@reduxjs/toolkit";
-import axioshttp from "../../utils/axiosInterceptor"
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axioshttp from "../../utils/axiosInterceptor";
 
 export const loginUser = createAsyncThunk(
-    "auth/loginUser",
-    async ({ email, password }, { rejectWithValue }) => {
-        try {
-            const res = await axioshttp.post("/login", {
-                email,
-                password,
-            });
+  "auth/loginUser",
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      console.log("📤 Sending login request:", { email, password });
 
-            localStorage.setItem("token", res.data.token);
-           localStorage.setItem("user", JSON.stringify(res.data.data));
-            console.log(res.data.data)
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(
-                err.response.data || "Login failed, please try again"
-            );
-        }
+      const res = await axioshttp.post("/login", { email, password }, {
+        withCredentials: true, // ✅ important if backend uses sessions
+        headers: { "Content-Type": "application/json" },
+      });
+
+      console.log("✅ Login response:", res.data);
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.data));
+
+      return res.data;
+    } catch (err) {
+      console.error("❌ Login failed:", err.response?.data || err.message);
+      return rejectWithValue(err.response?.data || "Login failed, please try again");
     }
+  }
 );
