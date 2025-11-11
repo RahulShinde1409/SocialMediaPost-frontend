@@ -42,19 +42,13 @@ const Header = () => {
               <Bars3Icon aria-hidden="true" className="h-7 w-7" />
             </button>
 
-            {/* Logo (hidden on mobile) */}
-            <Link
-              to="/view-post"
-              className="hidden sm:flex items-center gap-2"
-            >
+            {/* Logo (only visible on desktop) */}
+            <Link to="/view-post" className="hidden sm:flex items-center">
               <img
                 alt="logo"
                 src={logofeed}
                 className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto object-contain transition-all duration-300"
               />
-              <span className="hidden sm:block text-xl md:text-2xl font-semibold text-white tracking-wide">
-                Feed App
-              </span>
             </Link>
           </div>
 
@@ -119,16 +113,11 @@ const Header = () => {
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl p-6 sm:max-w-sm">
             {/* Logo inside menu */}
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <img
-                  src={logofeed}
-                  alt="logo"
-                  className="h-12 w-auto object-contain"
-                />
-                <span className="text-lg font-semibold text-gray-800">
-                  Feed App
-                </span>
-              </div>
+              <img
+                src={logofeed}
+                alt="logo"
+                className="h-12 w-auto object-contain"
+              />
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
