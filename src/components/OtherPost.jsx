@@ -42,25 +42,28 @@ export default function OtherPost() {
                 className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
 
-                {post.images?.length > 0 && (
-                  <div className="relative">
-                    <img
-                      src={`http://localhost:8000/static/${post.images[0]}`}
-                      alt={post.title}
-                      className="w-full h-60 object-cover"
-                    />
-                    <span
-                      className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${post.status === "approved"
-                        ? "bg-green-500 text-green-700"
-                        : post.status === "pending"
-                          ? "bg-yellow-400 text-yellow-700"
-                          : "bg-red-500 text-red-700"
-                        }`}
-                    >
-                      {post.status}
-                    </span>
-                  </div>
-                )}
+               {post.images?.length > 0 && (
+  <div className="relative">
+    <img
+      src={post.images[0]}  // ✅ Direct Cloudinary URL
+      alt={post.title}
+      className="w-full h-60 object-cover"
+      onError={(e) => { e.target.src = "/fallback.jpg"; }} // optional fallback
+    />
+    <span
+      className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${
+        post.status === "approved"
+          ? "bg-green-500 text-green-700"
+          : post.status === "pending"
+          ? "bg-yellow-400 text-yellow-700"
+          : "bg-red-500 text-red-700"
+      }`}
+    >
+      {post.status}
+    </span>
+  </div>
+)}
+
 
                 <h3 className="text-[22px] font-semibold mb-2 text-gray-800 p-3">
                   {post.title}
