@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { register } from "../../store/action/register.action";
 import { resetAuth } from "../../store/slice/register.slice";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // ✅ Added — you were using navigate but never declared it
   const { message, success, error, loading } = useSelector(
     (state) => state.register
   );
 
-  
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -25,24 +24,27 @@ export default function Register() {
       .required("Contact is required"),
   });
 
-  const handleSubmit = (values) => {
+  // ✅ include { setSubmitting } as 2nd param
+  const handleSubmit = (values, { setSubmitting }) => {
     const payload = {
       name: values.name,
       email: values.email,
       password: values.password,
-      contact: values.contact, 
-      // role: values.role || "user",
+      contact: values.contact,
     };
+
     dispatch(register(payload))
-    .unwrap()
-    .then(() => {
-      navigate("/login");   
-    })
-    .catch(() => {
-     
-    })
-    .finally(() => setSubmitting(false)); 
-};
+      .unwrap()
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("Registration error:", error);
+      })
+      .finally(() => {
+        setSubmitting(false); // ✅ Now defined
+      });
+  };
 
   useEffect(() => {
     if (message) {
@@ -54,26 +56,23 @@ export default function Register() {
   }, [message, dispatch]);
 
   return (
-    <>
-    
-    
     <div className="flex flex-col items-center justify-center rounded-lg h-screen bg-[#eff6e0]">
       <Formik
         initialValues={{
           name: "",
           email: "",
           password: "",
-          contact: "", 
-          // role: "",
+          contact: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {() => (
+        {({ isSubmitting }) => ( // ✅ optional — if you want to disable button when submitting
           <Form className="p-12 rounded shadow-md w-96 bg-gray-800 mt-12">
-            <h2 className="font-bold text-[24px] mb-4 text-center text-white">Register</h2>
+            <h2 className="font-bold text-[24px] mb-4 text-center text-white">
+              Register
+            </h2>
 
-            
             <div className="mb-2">
               <Field
                 type="text"
@@ -88,7 +87,6 @@ export default function Register() {
               />
             </div>
 
-           
             <div className="mb-2">
               <Field
                 type="email"
@@ -103,7 +101,6 @@ export default function Register() {
               />
             </div>
 
-            
             <div className="mb-2">
               <Field
                 type="password"
@@ -118,7 +115,6 @@ export default function Register() {
               />
             </div>
 
-           
             <div className="mb-2">
               <Field
                 type="text"
@@ -133,28 +129,23 @@ export default function Register() {
               />
             </div>
 
-            
-            {/* <div className="mb-2">
-              <Field as="select" name="role" className="border border-white p-2 w-full">
-                <option value="">Select Role</option>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </Field>
-            </div> */}
-
-           
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || isSubmitting}
               className="bg-green-500 text-white px-4 py-2 rounded w-full"
             >
-              {loading ? "Registering..." : "Register"}
-              
+              {loading || isSubmitting ? "Registering..." : "Register"}
             </button>
-            <p className="mt-3 text-white tracking-wider text-center">Already have an account ? 
-              <Link to="/login" className="hover:text-blue-500 cursor-pointer"> Login
+
+            <p className="mt-3 text-white tracking-wider text-center">
+              Already have an account?
+              <Link
+                to="/login"
+                className="hover:text-blue-500 cursor-pointer ml-1"
+              >
+                Login
               </Link>
-              </p>
+            </p>
           </Form>
         )}
       </Formik>
@@ -169,6 +160,5 @@ export default function Register() {
         </p>
       )}
     </div>
-    </>
   );
 }
