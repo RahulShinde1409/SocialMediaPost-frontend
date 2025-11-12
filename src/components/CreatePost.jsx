@@ -45,40 +45,30 @@ export default function CreatePost() {
                     </div>
 
                     <Formik
-                        initialValues={{ title: '', content: '', tags: '' }}
+                        initialValues={{ title: '', description: ''}}
                         validationSchema={PostSchema}
-                        onSubmit={(values, { resetForm }) => {
-                            const formData = new FormData();
+                     onSubmit={(values, { resetForm }) => {
+  const formData = new FormData();
+  formData.append("title", values.title);
+  formData.append("description", values.description);
+  if (imageFile) formData.append("images", imageFile);
 
-                            for (let key in values) {
-                                if (key === "images") {
-                                    values.images.forEach((file) => {
-                                        formData.append("images", file);
-                                    });
-                                } else if (Array.isArray(values[key]) || typeof values[key] === "object") {
-                                    formData.append(key, JSON.stringify(values[key]));
-                                } else {
-                                    formData.append(key, values[key]);
-                                }
-                            }
+  dispatch(createPost(formData))
+    .unwrap()
+    .then(() => {
+      setSuccessMessage("Post published successfully!");
+      navigate("/view-post");
+    })
+    .catch((err) => {
+      console.error("Post creation failed:", err);
+      setSuccessMessage("Failed to publish post");
+    });
 
-                            if (imageFile) formData.append('images', imageFile);
+  resetForm();
+  setImageFile(null);
+  setImagePreview(null);
+}}
 
-                            dispatch(createPost(formData))
-                                .unwrap()
-                                .then(() => {
-                                    setSuccessMessage("Post published successfully!"); 
-                                    navigate("/view-post")
-                                })
-                                .catch((err) => {
-                                    setSuccessMessage("Failed")
-                                    console.log("Something Went Wrong", err);
-                                });
-
-                            resetForm();
-                            setImageFile(null);
-                            setImagePreview(null);
-                        }}
                     >
                         {() => (
                             <Form className="mx-auto mt-14 max-w-xl space-y-6">
