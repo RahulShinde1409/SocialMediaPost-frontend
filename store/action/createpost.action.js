@@ -1,47 +1,64 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axioshttp from "../../utils/axiosInterceptor";
 
-// export const createPost = createAsyncThunk(
-//   'posts/createPost',
-//   async (formData, { rejectWithValue }) => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       const response = await axioshttp.post('/add-post', formData, {
+export const createPost = createAsyncThunk(
+  'posts/createPost',
+  async (formData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axioshttp.post('/add-post', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+
+      });
+      console.log(response.data)
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Post Create Failed");
+    }
+  }
+);
+
+
+
+// export const createPost = createAsyncThunk("posts/create", async (formData, { rejectWithValue }) => {
+//   try {
+//     const token = localStorage.getItem("token"); // make sure token exists
+//     const res = await axioshttp.post(
+//       "http://localhost:3000/api/post/add-post", // or your live API URL
+//       formData,
+//       {
 //         headers: {
-//           'Content-Type': 'multipart/form-data',
+//           "Content-Type": "multipart/form-data",
 //           Authorization: `Bearer ${token}`,
 //         },
+//       }
+//     );
+//     return res.data;
+//   } catch (err) {
+//     return rejectWithValue(err.response?.data || err.message);
+//   }
+// });
 
+// export const createPost = createAsyncThunk(
+//   "posts/create",
+//   async (formData, { rejectWithValue }) => {
+//     try {
+//       const token = localStorage.getItem("token"); // only if your backend needs it
+//       const res = await axioshttp.post("/post/add-post", formData, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//           Authorization: `Bearer ${token}`, // include this if backend uses auth middleware
+//         },
 //       });
-//       console.log(response.data)
-//       return response.data;
+//       return res.data;
 //     } catch (err) {
-//       return rejectWithValue(err.response?.data?.message || "Post Create Failed");
+//       return rejectWithValue(err.response?.data || err.message);
 //     }
 //   }
 // );
-
-
-
-export const createPost = createAsyncThunk("posts/create", async (formData, { rejectWithValue }) => {
-  try {
-    const token = localStorage.getItem("token"); // make sure token exists
-    const res = await axios.post(
-      "http://localhost:3000/api/post/add-post", // or your live API URL
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (err) {
-    return rejectWithValue(err.response?.data || err.message);
-  }
-});
-
 
 export const UserPosts = createAsyncThunk(
   "posts/fetchUserPosts",
