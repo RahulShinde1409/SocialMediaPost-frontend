@@ -1,10 +1,11 @@
-// import { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPost } from '../../store/action/createpost.action';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
+
 
 const PostSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
@@ -13,29 +14,12 @@ const PostSchema = Yup.object().shape({
 
 export default function CreatePost() {
     const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.posts);
+    const { items, loading, error } = useSelector((state) => state.posts);
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
 
     const navigate = useNavigate();
-
-    // ------------------------------------------
-    // CLOUDINARY UPLOAD
-    // ------------------------------------------
-    const uploadToCloudinary = async (file) => {
-        const data = new FormData();
-        data.append("file", file);
-        data.append("upload_preset", "your_preset"); // ← CHANGE THIS
-        data.append("cloud_name", "your_cloud_name"); // ← CHANGE THIS
-
-        const res = await fetch(
-            "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
-            { method: "POST", body: data }
-        );
-
-        return await res.json();
-    };
 
     const handleImageChange = (e) => {
         const file = e.target.files?.[0] || null;
@@ -61,98 +45,115 @@ export default function CreatePost() {
                     </div>
 
                     <Formik
-                        initialValues={{ title: '', description: '' }}
+                        initialValues={{ title: '', description: ''}}
                         validationSchema={PostSchema}
-                        onSubmit={async (values, { resetForm }) => {
+                     onSubmit={(values, { resetForm }) => {
+  const formData = new FormData();
+  formData.append("title", values.title);
+  formData.append("description", values.description);
+  if (imageFile) formData.append("images", imageFile);
 
-                            let imageUrl = null;
+  dispatch(createPost(formData))
+    .unwrap()
+    .then(() => {
+      setSuccessMessage("Post published successfully!");
+      navigate("/view-post");
+    })
+    .catch((err) => {
+      console.error("Post creation failed:", err);
+      setSuccessMessage("Failed to publish post");
+    });
 
-                            // Upload image if selected
-                            if (imageFile) {
-                                const uploadResult = await uploadToCloudinary(imageFile);
-                                imageUrl = uploadResult.secure_url;
-                            }
+  resetForm();
+  setImageFile(null);
+  setImagePreview(null);
+}}
 
-                            // SEND JSON ONLY — NOT FORM DATA
-                            const payload = {
-                                title: values.title,
-                                description: values.description,
-                                image: imageUrl,
-                            };
-
-                            dispatch(createPost(payload))
-                                .unwrap()
-                                .then(() => {
-                                    setSuccessMessage("Post published successfully!");
-                                    navigate("/view-post");
-                                })
-                                .catch((err) => {
-                                    console.error("Post creation failed:", err);
-                                    setSuccessMessage("Failed to publish post");
-                                });
-
-                            resetForm();
-                            setImageFile(null);
-                            setImagePreview(null);
-                        }}
                     >
                         {() => (
                             <Form className="mx-auto mt-14 max-w-xl space-y-6">
-
+                                
                                 <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Title
                                     </label>
-                                    <Field
-                                        name="title"
-                                        type="text"
-                                        className="block w-full rounded-md border-0 bg-white px-3.5 py-2"
-                                        placeholder="Enter your post title"
-                                    />
-                                    <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
+                                    <div className="mt-2.5">
+                                        <Field
+                                            name="title"
+                                            type="text"
+                                            className="block w-full rounded-md border-0 bg-white px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            placeholder="Enter your post title"
+                                        />
+                                        <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
+                                    </div>
                                 </div>
 
+                                
+                                {/* <div>
+                                    <label className="block text-sm font-semibold leading-6 text-gray-900">
+                                        Tags
+                                    </label>
+                                    <div className="mt-2.5">
+                                        <Field
+                                            name="tags"
+                                            type="text"
+                                            className="block w-full rounded-md bg-white border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            placeholder="react, hooks, redux"
+                                        />
+                                    </div>
+                                </div> */}
+
+                                
                                 <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Description
                                     </label>
-                                    <Field
-                                        as="textarea"
-                                        name="description"
-                                        rows={6}
-                                        className="block w-full rounded-md border-0 bg-white px-3.5 py-2"
-                                        placeholder="Write your post here..."
-                                    />
-                                    <ErrorMessage name="description" component="div" className="text-red-500 text-sm mt-1" />
+                                    <div className="mt-2.5">
+                                        <Field
+                                            as="textarea"
+                                            name="description"
+                                            rows={6}
+                                            className="block w-full rounded-md border-0 bg-white px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            placeholder="Write your post here..."
+                                        />
+                                        <ErrorMessage name="description" component="div" className="text-red-500 text-sm mt-1" />
+                                    </div>
                                 </div>
 
+                                
                                 <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Feature Image
                                     </label>
-                                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                                    {imagePreview && (
-                                        <img
-                                            src={imagePreview}
-                                            alt="preview"
-                                            className="mt-3 max-h-40 rounded-md object-cover"
-                                        />
-                                    )}
+                                    <div className="mt-2.5">
+                                        <input type="file" accept="image/*" onChange={handleImageChange} />
+                                        {imagePreview && (
+                                            <div className="mt-3">
+                                                <img
+                                                    src={imagePreview}
+                                                    alt="preview"
+                                                    className="max-h-40 rounded-md object-cover"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white"
-                                >
-                                    {loading ? "Submitting..." : "Publish Post"}
-                                </button>
-
+                               
+                                <div className="mt-10">
+                                    {error && <div className="text-sm text-red-600 mb-2">{error}</div>}
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                    >
+                                        {loading ? 'Submitting...' : 'Publish Post'}
+                                    </button>
+                                </div>
                             </Form>
                         )}
                     </Formik>
-
-                    {successMessage && (
+                     {successMessage && (
                         <div className="mt-6 text-center text-green-600 font-semibold">
                             {successMessage}
                         </div>

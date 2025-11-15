@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllApprovedPosts } from "../../store/action/createpost.action";
 import Header from "./Header";
+import { useState } from "react";
 
 export default function OtherPost() {
   const dispatch = useDispatch();

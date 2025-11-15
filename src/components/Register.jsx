@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { register } from "../../store/action/register.action";
 import { resetAuth } from "../../store/slice/register.slice";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Register() {
   const dispatch = useDispatch();
