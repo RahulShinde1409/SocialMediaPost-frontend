@@ -48,12 +48,22 @@ export default function CreatePost() {
                         initialValues={{ title: '', description: ''}}
                         validationSchema={PostSchema}
                      onSubmit={(values, { resetForm }) => {
-  const formData = new FormData();
-  formData.append("title", values.title);
-  formData.append("description", values.description);
-  if (imageFile) formData.append("images", imageFile);
+//   const formData = new FormData();
+//   formData.append("title", values.title);
+//   formData.append("description", values.description);
+//   if (imageFile) formData.append("images", imageFile);
 
-  dispatch(createPost(formData))
+//   dispatch(createPost(formData))
+const formData = new FormData();
+formData.append("title", values.title);
+formData.append("description", values.description);
+
+if (imageFile) {
+  formData.append("image", imageFile); // FIXED
+}
+
+dispatch(updatePost({ id: post_id, formData }));
+
     .unwrap()
     .then(() => {
       setSuccessMessage("Post published successfully!");
