@@ -52,57 +52,20 @@ export default function ViewPost() {
 
 
 
-// const handleDelete = (id) => {
-//   if (window.confirm("Are you sure?")) {
-//     dispatch(deletePost(id))
-//       .unwrap()
-//       .then(() => {
-//         dispatch(UserPosts());   // Refresh posts
-//       });
-//   }
-// };
+const handleDelete = (id) => {
+  if (window.confirm("Are you sure want to delete this post?")) {
+    dispatch(deletePost(id))
+      .unwrap()
+      .then(() => {
+        dispatch(UserPosts());   // Refresh posts
+      });
+  }
+};
   
 
-const handleUpdate = async () => {
-  const dataToSend = new FormData();
-  dataToSend.append("title", formData.title);
-  dataToSend.append("description", formData.description);
 
-  if (selectedFile) {
-    dataToSend.append("images", selectedFile);
-  }
 
-  try {
-    console.log("Updating...");
 
-    const result = await dispatch(
-      updatePost({
-        id: selectedPost._id,
-        formData: dataToSend,
-      })
-    ).unwrap();
-
-    console.log("Update Success:", result);
-
-    setModalOpen(false);
-
-    await dispatch(UserPosts());
-
-  } catch (err) {
-    console.error("Update Error:", err);
-  }
-};
-
-const handleDelete = async (id) => {
-  if (!window.confirm("Are you sure?")) return;
-
-  try {
-    await dispatch(deletePost(id)).unwrap();
-    await dispatch(UserPosts()).unwrap();
-  } catch (err) {
-    console.error(err);
-  }
-};
 
   // const handleDelete = (id) => {
   //   if (window.confirm("Are you sure you want to delete this post?")) {
