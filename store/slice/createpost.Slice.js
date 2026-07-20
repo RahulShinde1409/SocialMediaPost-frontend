@@ -47,13 +47,30 @@ const postSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+            // .addCase(updatePost.fulfilled, (state, action) => {
+            //     const index = state.items.findIndex(p => p._id === action.payload._id);
+            //     if (index !== -1) state.items[index] = action.payload;
+            // })
+
             .addCase(updatePost.fulfilled, (state, action) => {
-                const index = state.items.findIndex(p => p._id === action.payload._id);
-                if (index !== -1) state.items[index] = action.payload;
-            })
+    const index = state.items.findIndex(
+        p => p._id === action.payload._id
+    );
+
+    if (index !== -1) {
+        state.items[index] = action.payload;
+    }
+
+    state.loading = false;
+})
+            // .addCase(deletePost.fulfilled, (state, action) => {
+            //     state.items = state.items.filter(p => p._id !== action.payload);
+            // })
+
             .addCase(deletePost.fulfilled, (state, action) => {
-                state.items = state.items.filter(p => p._id !== action.payload);
-            })
+    state.items = state.items.filter(post => post._id !== action.payload);
+    state.loading = false;
+})
             .addCase(approvePost.fulfilled, (state, action) => {
                 // remove from pending list
                 state.items = state.items.filter(post => post._id !== action.payload._id);
