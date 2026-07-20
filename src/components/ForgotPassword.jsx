@@ -6,22 +6,18 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const res = await axios.post(
-        "YOUR_BACKEND_URL/user/forget-password",
-        {
-          email,
-        }
-      );
+  try {
+    const res = await forgotPassword(email);
+    setMessage(res.message);
+  } catch (error) {
+    setMessage(error.response?.data?.message || "Something went wrong");
+  }
+};
 
-      setMessage(res.data.message);
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong");
-    }
-  };
+   
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#eff6e0]">
