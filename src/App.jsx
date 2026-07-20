@@ -5,13 +5,15 @@ import ViewPost from "./components/ViewPosts"
 import CreatePost from "./components/CreatePost"
 import OtherPost from "./components/OtherPost"
 import { useSelector } from "react-redux"
+import ForgotPassword from "./components/ForgotPassword"
+import ReserPassword from "./components/ResetPassword"
 
 import AdminPosts from "./components/Adminpage"
 import { Navigate } from "react-router-dom"
 
 
 function App() {
-   const {user} = useSelector((state) => state.login);
+  const { user } = useSelector((state) => state.login);
   //  console.log(user.role)
   return (
     <>
@@ -24,9 +26,11 @@ function App() {
         <Route path="/other-post" element={<OtherPost />} />
         <Route
           path="/admin"
-          element={ user &&  user?.role === "admin" ? <AdminPosts/> : <Navigate to="/" />}
+          element={user && user?.role === "admin" ? <AdminPosts /> : <Navigate to="/" />}
         />
         {/* <Route path="/admin" element={<AdminPosts/>}/> */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-pass/:token" element={<ResetPassword />} />
       </Routes>
     </>
   )

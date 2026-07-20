@@ -99,13 +99,29 @@ export default function Login() {
                   <p className="text-green-500 font-medium">{successMsg}</p>
                 )}
 
-                <button
+                {/* <button
                   type="submit"
                   disabled={isSubmitting || loading}
                   className="w-full rounded-md bg-indigo-500 py-2 text-white font-semibold hover:bg-indigo-400"
                 >
                   {loading ? "Signing in..." : "Sign in"}
-                </button>
+                </button> */}
+                <button
+  type="submit"
+  disabled={isSubmitting || loading}
+  className="w-full rounded-md bg-indigo-500 py-2 text-white font-semibold hover:bg-indigo-400"
+>
+  {loading ? "Signing in..." : "Sign in"}
+</button>
+
+<div className="text-right mt-2">
+  <Link
+    to="/forgot-password"
+    className="text-blue-400 hover:underline text-sm"
+  >
+    Forgot Password?
+  </Link>
+</div>
               </Form>
             )}
           </Formik>
@@ -116,6 +132,7 @@ export default function Login() {
               Register
             </Link>
           </p>
+          
         </div>
       </div>
     </>
