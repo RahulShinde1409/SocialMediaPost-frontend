@@ -6,7 +6,7 @@ import CreatePost from "./components/CreatePost"
 import OtherPost from "./components/OtherPost"
 import { useSelector } from "react-redux"
 import ForgotPassword from "./components/ForgotPassword"
-import ReserPassword from "./components/ResetPassword"
+import ResetPassword from "./components/ResetPassword"
 
 import AdminPosts from "./components/Adminpage"
 import { Navigate } from "react-router-dom"
