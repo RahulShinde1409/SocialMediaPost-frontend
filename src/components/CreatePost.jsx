@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost } from '../../store/action/createpost.action';
+import { createPost, UserPosts} from '../../store/action/createpost.action';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Header from './Header';
