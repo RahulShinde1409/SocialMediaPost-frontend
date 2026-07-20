@@ -1,6 +1,6 @@
 import { useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import { forgotPassword } from "../actions/authAction";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -10,56 +10,62 @@ export default function ForgotPassword() {
     e.preventDefault();
 
     try {
-      const res = await forgotPassword(email);
-      setMessage(res.message);
+      const res = await axios.post(
+        "YOUR_BACKEND_URL/user/forget-password",
+        {
+          email,
+        }
+      );
+
+      setMessage(res.data.message);
     } catch (error) {
       setMessage(error.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-blue-100">
-      <div className="w-full max-w-md bg-red-900 rounded-2xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold text-white text-center mb-2">
-          Forgot Password
-        </h1>
+    <div className="flex min-h-screen items-center justify-center bg-[#eff6e0]">
+      <div className="w-full max-w-sm bg-gray-800 p-8 rounded-xl shadow-lg">
 
-        <p className="text-gray-300 text-center mb-6">
-          Enter your email address to receive a password reset link.
-        </p>
+        <h2 className="text-2xl text-white text-center font-bold mb-5">
+          Forgot Password
+        </h2>
 
         {message && (
-          <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-4 text-center">
+          <p className="text-center text-green-400 mb-4">
             {message}
-          </div>
+          </p>
         )}
 
         <form onSubmit={handleSubmit}>
+
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full p-3 rounded-lg border border-gray-300 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-3 rounded-md mb-4"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
 
           <button
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition"
+            className="w-full bg-indigo-500 text-white p-3 rounded-md"
           >
             Send Reset Link
           </button>
+
         </form>
 
-        <div className="text-center mt-5">
+        <div className="text-center mt-4">
+
           <Link
             to="/login"
-            className="text-blue-400 hover:text-blue-300"
+            className="text-blue-400"
           >
-            ← Back to Login
+            Back to Login
           </Link>
+
         </div>
+
       </div>
     </div>
   );
