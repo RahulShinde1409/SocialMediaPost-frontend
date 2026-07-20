@@ -110,8 +110,9 @@ const handleUpdate = async () => {
     }, 3000);
 
   } catch (err) {
-    console.log(err);
-  }
+  console.log("UPDATE ERROR:", err);
+  alert("Update Failed");
+}
 };
 
 const handleDelete = (id) => {
