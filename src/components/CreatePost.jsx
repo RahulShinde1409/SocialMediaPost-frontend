@@ -53,12 +53,18 @@ export default function CreatePost() {
   formData.append("description", values.description);
   if (imageFile) formData.append("images", imageFile);
 
-  dispatch(createPost(formData))
-    .unwrap()
-    .then(() => {
-      setSuccessMessage("Post published successfully!");
-      navigate("/view-post");
-    })
+//   dispatch(createPost(formData))
+//     .unwrap()
+//     .then(() => {
+//       setSuccessMessage("Post published successfully!");
+//       navigate("/view-post");
+//     })
+dispatch(createPost(formData))
+  .unwrap()
+  .then(() => {
+    dispatch(UserPosts());   // Refresh posts
+    navigate("/view-post");
+  })
     .catch((err) => {
       console.error("Post creation failed:", err);
       setSuccessMessage("Failed to publish post");

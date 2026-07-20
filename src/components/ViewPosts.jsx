@@ -23,23 +23,51 @@ export default function ViewPost() {
     setModalOpen(true);
   };
 
+  // const handleUpdate = () => {
+  //   const dataToSend = new FormData();
+  //   dataToSend.append("title", formData.title);
+  //   dataToSend.append("description", formData.description);
+  //   if (selectedFile) {
+  //     dataToSend.append("images", selectedFile);
+  //   }
+
+  //   dispatch(updatePost({ id: selectedPost._id, formData: dataToSend }));
+  //   setModalOpen(false);
+  // };
+
   const handleUpdate = () => {
-    const dataToSend = new FormData();
-    dataToSend.append("title", formData.title);
-    dataToSend.append("description", formData.description);
-    if (selectedFile) {
-      dataToSend.append("images", selectedFile);
-    }
+  const dataToSend = new FormData();
+  dataToSend.append("title", formData.title);
+  dataToSend.append("description", formData.description);
 
-    dispatch(updatePost({ id: selectedPost._id, formData: dataToSend }));
-    setModalOpen(false);
-  };
+  if (selectedFile) {
+    dataToSend.append("images", selectedFile);
+  }
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      dispatch(deletePost(id));
-    }
-  };
+  dispatch(updatePost({ id: selectedPost._id, formData: dataToSend }))
+    .unwrap()
+    .then(() => {
+      dispatch(UserPosts());   // Refresh posts
+      setModalOpen(false);
+    });
+};
+
+
+const handleDelete = (id) => {
+  if (window.confirm("Are you sure?")) {
+    dispatch(deletePost(id))
+      .unwrap()
+      .then(() => {
+        dispatch(UserPosts());   // Refresh posts
+      });
+  }
+};
+  
+  // const handleDelete = (id) => {
+  //   if (window.confirm("Are you sure you want to delete this post?")) {
+  //     dispatch(deletePost(id));
+  //   }
+  // };
 
   if (loading) return <p className="text-center text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
