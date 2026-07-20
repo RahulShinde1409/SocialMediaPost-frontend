@@ -50,8 +50,36 @@ export default function ViewPost() {
 //   }
 // };
 
+// const handleUpdate = async () => {
+//   const dataToSend = new FormData();
+//   dataToSend.append("title", formData.title);
+//   dataToSend.append("description", formData.description);
+
+//   if (selectedFile) {
+//     dataToSend.append("images", selectedFile);
+//   }
+
+//   try {
+//     await dispatch(
+//       updatePost({
+//         id: selectedPost._id,
+//         formData: dataToSend,
+//       })
+//     ).unwrap();
+
+//     // Close the modal
+//     setModalOpen(false);
+
+//     // Refresh the posts list
+//     dispatch(UserPosts());
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
 const handleUpdate = async () => {
   const dataToSend = new FormData();
+
   dataToSend.append("title", formData.title);
   dataToSend.append("description", formData.description);
 
@@ -67,13 +95,14 @@ const handleUpdate = async () => {
       })
     ).unwrap();
 
-    // Close the modal
+    // Close modal
     setModalOpen(false);
 
-    // Refresh the posts list
-    dispatch(UserPosts());
-  } catch (error) {
-    console.error(error);
+    // Refresh data
+    await dispatch(UserPosts());
+
+  } catch (err) {
+    console.log(err);
   }
 };
 
