@@ -23,19 +23,7 @@ export default function ViewPost() {
     setModalOpen(true);
   };
 
-  // const handleUpdate = () => {
-  //   const dataToSend = new FormData();
-  //   dataToSend.append("title", formData.title);
-  //   dataToSend.append("description", formData.description);
-  //   if (selectedFile) {
-  //     dataToSend.append("images", selectedFile);
-  //   }
-
-  //   dispatch(updatePost({ id: selectedPost._id, formData: dataToSend }));
-  //   setModalOpen(false);
-  // };
-
-  const handleUpdate = () => {
+const handleUpdate = async () => {
   const dataToSend = new FormData();
   dataToSend.append("title", formData.title);
   dataToSend.append("description", formData.description);
@@ -44,25 +32,47 @@ export default function ViewPost() {
     dataToSend.append("images", selectedFile);
   }
 
-  dispatch(updatePost({ id: selectedPost._id, formData: dataToSend }))
-    .unwrap()
-    .then(() => {
-      dispatch(UserPosts());   // Refresh posts
-      setModalOpen(false);
-    });
-};
+  try {
+    await dispatch(
+      updatePost({
+        id: selectedPost._id,
+        formData: dataToSend,
+      })
+    ).unwrap();
 
+    // Refresh posts
+    await dispatch(UserPosts()).unwrap();
 
-const handleDelete = (id) => {
-  if (window.confirm("Are you sure?")) {
-    dispatch(deletePost(id))
-      .unwrap()
-      .then(() => {
-        dispatch(UserPosts());   // Refresh posts
-      });
+    // Close modal
+    setModalOpen(false);
+  } catch (err) {
+    console.error(err);
   }
 };
+
+
+
+// const handleDelete = (id) => {
+//   if (window.confirm("Are you sure?")) {
+//     dispatch(deletePost(id))
+//       .unwrap()
+//       .then(() => {
+//         dispatch(UserPosts());   // Refresh posts
+//       });
+//   }
+// };
   
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure?")) return;
+
+  try {
+    await dispatch(deletePost(id)).unwrap();
+    await dispatch(UserPosts()).unwrap();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   // const handleDelete = (id) => {
   //   if (window.confirm("Are you sure you want to delete this post?")) {
   //     dispatch(deletePost(id));
