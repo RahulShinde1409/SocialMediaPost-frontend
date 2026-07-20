@@ -23,6 +23,33 @@ export default function ViewPost() {
     setModalOpen(true);
   };
 
+// const handleUpdate = async () => {
+//   const dataToSend = new FormData();
+//   dataToSend.append("title", formData.title);
+//   dataToSend.append("description", formData.description);
+
+//   if (selectedFile) {
+//     dataToSend.append("images", selectedFile);
+//   }
+
+//   try {
+//     await dispatch(
+//       updatePost({
+//         id: selectedPost._id,
+//         formData: dataToSend,
+//       })
+//     ).unwrap();
+
+//     // Refresh posts
+//     await dispatch(UserPosts()).unwrap();
+
+//     // Close modal
+//     setModalOpen(false);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
 const handleUpdate = async () => {
   const dataToSend = new FormData();
   dataToSend.append("title", formData.title);
@@ -40,17 +67,15 @@ const handleUpdate = async () => {
       })
     ).unwrap();
 
-    // Refresh posts
-    await dispatch(UserPosts()).unwrap();
-
-    // Close modal
+    // Close the modal
     setModalOpen(false);
-  } catch (err) {
-    console.error(err);
+
+    // Refresh the posts list
+    dispatch(UserPosts());
+  } catch (error) {
+    console.error(error);
   }
 };
-
-
 
 const handleDelete = (id) => {
   if (window.confirm("Are you sure want to delete this post?")) {
