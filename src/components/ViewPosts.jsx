@@ -62,13 +62,13 @@ export default function ViewPost() {
                 key={post._id}
                 className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
-                {post.images?.length > 0 && (
+                {/* {post.images?.length > 0 && (
                   <div className="relative">
                     <img
-                      src={`http://localhost:8000/static/${post.images[0]}`}
-                      alt={post.title}
-                      className="w-full h-60 object-cover"
-                    />
+  src={Array.isArray(post.images) ? post.images[0] : post.images}
+  alt={post.title}
+  className="w-full h-60 object-cover"
+/>
                     <span
                       className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${post.status === "approved"
                           ? "bg-green-500 text-green-700"
@@ -80,7 +80,28 @@ export default function ViewPost() {
                       {post.status}
                     </span>
                   </div>
-                )}
+                )} */}
+
+                {post.images && (
+  <div className="relative">
+    <img
+      src={Array.isArray(post.images) ? post.images[0] : post.images}
+      alt={post.title}
+      className="w-full h-60 object-cover"
+    />
+    <span
+      className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${
+        post.status === "approved"
+          ? "bg-green-500 text-green-700"
+          : post.status === "pending"
+          ? "bg-yellow-400 text-yellow-700"
+          : "bg-red-500 text-red-700"
+      }`}
+    >
+      {post.status}
+    </span>
+  </div>
+)}
 
                 <h3 className="text-xl font-semibold mb-2 text-gray-800 p-3">
                   {post.title}
@@ -150,12 +171,12 @@ export default function ViewPost() {
                 onChange={(e) => setSelectedFile(e.target.files[0])}
                 className="w-full border p-2 mb-3 rounded"
               />
-              {selectedPost.images?.length > 0 && (
-                <img
-                  src={`http://localhost:8000/static/${selectedPost.images[0]}`}
-                  alt="Current"
-                  className="w-full h-40 object-cover mb-3"
-                />
+             {selectedPost?.images && ( 
+<img
+  src={Array.isArray(selectedPost.images) ? selectedPost.images[0] : selectedPost.images}
+  alt="Current"
+  className="w-full h-40 object-cover mb-3"
+/>
               )}
               <div className="flex justify-end gap-2">
 
