@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost, UserPosts} from '../../store/action/createpost.action';
+import { createPost, UserPosts } from '../../store/action/createpost.action';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Header from './Header';
@@ -45,40 +45,40 @@ export default function CreatePost() {
                     </div>
 
                     <Formik
-                        initialValues={{ title: '', description: ''}}
+                        initialValues={{ title: '', description: '' }}
                         validationSchema={PostSchema}
-                     onSubmit={(values, { resetForm }) => {
-  const formData = new FormData();
-  formData.append("title", values.title);
-  formData.append("description", values.description);
-  if (imageFile) formData.append("images", imageFile);
+                        onSubmit={(values, { resetForm }) => {
+                            const formData = new FormData();
+                            formData.append("title", values.title);
+                            formData.append("description", values.description);
+                            if (imageFile) formData.append("images", imageFile);
 
-//   dispatch(createPost(formData))
-//     .unwrap()
-//     .then(() => {
-//       setSuccessMessage("Post published successfully!");
-//       navigate("/view-post");
-//     })
-dispatch(createPost(formData))
-  .unwrap()
-  .then(() => {
-    dispatch(UserPosts());   // Refresh posts
-    navigate("/view-post");
-  })
-    .catch((err) => {
-      console.error("Post creation failed:", err);
-      setSuccessMessage("Failed to publish post");
-    });
+                            //   dispatch(createPost(formData))
+                            //     .unwrap()
+                            //     .then(() => {
+                            //       setSuccessMessage("Post published successfully!");
+                            //       navigate("/view-post");
+                            //     })
+                            dispatch(createPost(formData))
+                                .unwrap()
+                                .then(() => {
+                                    dispatch(UserPosts());   // Refresh posts
+                                    navigate("/view-post");
+                                })
+                                .catch((err) => {
+                                    console.error("Post creation failed:", err);
+                                    setSuccessMessage("Failed to publish post");
+                                });
 
-  resetForm();
-  setImageFile(null);
-  setImagePreview(null);
-}}
+                            resetForm();
+                            setImageFile(null);
+                            setImagePreview(null);
+                        }}
 
                     >
                         {() => (
                             <Form className="mx-auto mt-14 max-w-xl space-y-6">
-                                
+
                                 <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Title
@@ -94,7 +94,7 @@ dispatch(createPost(formData))
                                     </div>
                                 </div>
 
-                                
+
                                 {/* <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Tags
@@ -109,7 +109,7 @@ dispatch(createPost(formData))
                                     </div>
                                 </div> */}
 
-                                
+
                                 <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Description
@@ -126,7 +126,7 @@ dispatch(createPost(formData))
                                     </div>
                                 </div>
 
-                                
+
                                 <div>
                                     <label className="block text-sm font-semibold leading-6 text-gray-900">
                                         Feature Image
@@ -145,7 +145,7 @@ dispatch(createPost(formData))
                                     </div>
                                 </div>
 
-                               
+
                                 <div className="mt-10">
                                     {error && <div className="text-sm text-red-600 mb-2">{error}</div>}
                                     <button
@@ -159,7 +159,7 @@ dispatch(createPost(formData))
                             </Form>
                         )}
                     </Formik>
-                     {successMessage && (
+                    {successMessage && (
                         <div className="mt-6 text-center text-green-600 font-semibold">
                             {successMessage}
                         </div>
