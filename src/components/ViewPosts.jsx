@@ -11,7 +11,7 @@ export default function ViewPost() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [formData, setFormData] = useState({ title: "", description: "" });
   const [selectedFile, setSelectedFile] = useState(null);
-
+const [successMessage, setSuccessMessage] = useState("");
   useEffect(() => {
     dispatch(UserPosts());
   }, [dispatch]);
@@ -98,8 +98,16 @@ const handleUpdate = async () => {
     // Close modal
     setModalOpen(false);
 
-    // Refresh data
+    // Show success message
+    setSuccessMessage("Post updated successfully!");
+
+    // Refresh posts
     await dispatch(UserPosts());
+
+    // Hide message after 3 seconds
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 3000);
 
   } catch (err) {
     console.log(err);
@@ -139,7 +147,13 @@ const handleDelete = (id) => {
       <Header />
       <div className="min-h-screen bg-[#eff6e0] py-14 px-6">
         <h2 className="text-2xl font-bold text-center mb-6 mt-18 sm:mt-14">My Posts</h2>
-        {posts.length === 0 ? (
+        {successMessage && (
+  <div className="mb-4 text-center text-green-600 font-semibold">
+    {successMessage}
+  </div>
+)}
+
+{posts.length === 0 ? (
           <p className="text-center text-gray-600">No posts yet</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
