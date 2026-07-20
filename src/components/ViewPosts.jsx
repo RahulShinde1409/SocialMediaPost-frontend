@@ -23,32 +23,32 @@ export default function ViewPost() {
     setModalOpen(true);
   };
 
-// const handleUpdate = async () => {
-//   const dataToSend = new FormData();
-//   dataToSend.append("title", formData.title);
-//   dataToSend.append("description", formData.description);
+const handleUpdate = async () => {
+  const dataToSend = new FormData();
+  dataToSend.append("title", formData.title);
+  dataToSend.append("description", formData.description);
 
-//   if (selectedFile) {
-//     dataToSend.append("images", selectedFile);
-//   }
+  if (selectedFile) {
+    dataToSend.append("images", selectedFile);
+  }
 
-//   try {
-//     await dispatch(
-//       updatePost({
-//         id: selectedPost._id,
-//         formData: dataToSend,
-//       })
-//     ).unwrap();
+  try {
+    await dispatch(
+      updatePost({
+        id: selectedPost._id,
+        formData: dataToSend,
+      })
+    ).unwrap();
 
-//     // Refresh posts
-//     await dispatch(UserPosts()).unwrap();
+    // Refresh posts
+    await dispatch(UserPosts()).unwrap();
 
-//     // Close modal
-//     setModalOpen(false);
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+    // Close modal
+    setModalOpen(false);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 
 
