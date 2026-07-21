@@ -32,13 +32,18 @@ export default function Login() {
         setSuccessMsg("Login successful ✅");
 
         // navigate after a short delay
-        setTimeout(() => {
-          if (res.data?.role === "admin") {
-            navigate("/admin");
-          } else {
-            navigate("/view-post");
-          }
-        }, 1000);
+        // setTimeout(() => {
+        //   if (res.data?.role === "admin") {
+        //     navigate("/admin");
+        //   } else {
+        //     navigate("/view-post");
+        //   }
+        // }, 1000);
+        if (res.data?.role === "admin") {
+  navigate("/admin");
+} else {
+  navigate("/view-post");
+}
       })
       .catch(() => {
         setSuccessMsg(""); // no success message on error

@@ -11,7 +11,7 @@ export default function ViewPost() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [formData, setFormData] = useState({ title: "", description: "" });
   const [selectedFile, setSelectedFile] = useState(null);
-const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   useEffect(() => {
     dispatch(UserPosts());
   }, [dispatch]);
@@ -23,108 +23,108 @@ const [successMessage, setSuccessMessage] = useState("");
     setModalOpen(true);
   };
 
-// const handleUpdate = async () => {
-//   const dataToSend = new FormData();
-//   dataToSend.append("title", formData.title);
-//   dataToSend.append("description", formData.description);
+  // const handleUpdate = async () => {
+  //   const dataToSend = new FormData();
+  //   dataToSend.append("title", formData.title);
+  //   dataToSend.append("description", formData.description);
 
-//   if (selectedFile) {
-//     dataToSend.append("images", selectedFile);
-//   }
+  //   if (selectedFile) {
+  //     dataToSend.append("images", selectedFile);
+  //   }
 
-//   try {
-//     await dispatch(
-//       updatePost({
-//         id: selectedPost._id,
-//         formData: dataToSend,
-//       })
-//     ).unwrap();
+  //   try {
+  //     await dispatch(
+  //       updatePost({
+  //         id: selectedPost._id,
+  //         formData: dataToSend,
+  //       })
+  //     ).unwrap();
 
-//     // Refresh posts
-//     await dispatch(UserPosts()).unwrap();
+  //     // Refresh posts
+  //     await dispatch(UserPosts()).unwrap();
 
-//     // Close modal
-//     setModalOpen(false);
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+  //     // Close modal
+  //     setModalOpen(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-// const handleUpdate = async () => {
-//   const dataToSend = new FormData();
-//   dataToSend.append("title", formData.title);
-//   dataToSend.append("description", formData.description);
+  // const handleUpdate = async () => {
+  //   const dataToSend = new FormData();
+  //   dataToSend.append("title", formData.title);
+  //   dataToSend.append("description", formData.description);
 
-//   if (selectedFile) {
-//     dataToSend.append("images", selectedFile);
-//   }
+  //   if (selectedFile) {
+  //     dataToSend.append("images", selectedFile);
+  //   }
 
-//   try {
-//     await dispatch(
-//       updatePost({
-//         id: selectedPost._id,
-//         formData: dataToSend,
-//       })
-//     ).unwrap();
+  //   try {
+  //     await dispatch(
+  //       updatePost({
+  //         id: selectedPost._id,
+  //         formData: dataToSend,
+  //       })
+  //     ).unwrap();
 
-//     // Close the modal
-//     setModalOpen(false);
+  //     // Close the modal
+  //     setModalOpen(false);
 
-//     // Refresh the posts list
-//     dispatch(UserPosts());
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+  //     // Refresh the posts list
+  //     dispatch(UserPosts());
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-const handleUpdate = async () => {
-  const dataToSend = new FormData();
+  const handleUpdate = async () => {
+    const dataToSend = new FormData();
 
-  dataToSend.append("title", formData.title);
-  dataToSend.append("description", formData.description);
+    dataToSend.append("title", formData.title);
+    dataToSend.append("description", formData.description);
 
-  if (selectedFile) {
-    dataToSend.append("images", selectedFile);
-  }
+    if (selectedFile) {
+      dataToSend.append("images", selectedFile);
+    }
 
-  try {
-    await dispatch(
-      updatePost({
-        id: selectedPost._id,
-        formData: dataToSend,
-      })
-    ).unwrap();
+    try {
+      await dispatch(
+        updatePost({
+          id: selectedPost._id,
+          formData: dataToSend,
+        })
+      ).unwrap();
 
-    // Close modal
-    setModalOpen(false);
+      // Close modal
+      setModalOpen(false);
 
-    // Show success message
-    setSuccessMessage("Post updated successfully!");
+      // Show success message
+      setSuccessMessage("Post updated successfully!");
 
-    // Refresh posts
-    await dispatch(UserPosts());
+      // Refresh posts
+      await dispatch(UserPosts());
 
-    // Hide message after 3 seconds
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
+      // Hide message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
 
-  } catch (err) {
-  console.log("UPDATE ERROR:", err);
-  alert("Update Failed");
-}
-};
+    } catch (err) {
+      console.log("UPDATE ERROR:", err);
+      alert("Update Failed");
+    }
+  };
 
-const handleDelete = (id) => {
-  if (window.confirm("Are you sure want to delete this post?")) {
-    dispatch(deletePost(id))
-      .unwrap()
-      .then(() => {
-        dispatch(UserPosts());   // Refresh posts
-      });
-  }
-};
-  
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure want to delete this post?")) {
+      dispatch(deletePost(id))
+        .unwrap()
+        .then(() => {
+          dispatch(UserPosts());   // Refresh posts
+        });
+    }
+  };
+
 
 
 
@@ -146,15 +146,16 @@ const handleDelete = (id) => {
   return (
     <>
       <Header />
+      
       <div className="min-h-screen bg-[#eff6e0] py-14 px-6">
         <h2 className="text-2xl font-bold text-center mb-6 mt-18 sm:mt-14">My Posts</h2>
         {successMessage && (
-  <div className="mb-4 text-center text-green-600 font-semibold">
-    {successMessage}
-  </div>
-)}
+          <div className="mb-4 text-center text-green-600 font-semibold">
+            {successMessage}
+          </div>
+        )}
 
-{posts.length === 0 ? (
+        {posts.length === 0 ? (
           <p className="text-center text-gray-600">No posts yet</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -184,25 +185,24 @@ const handleDelete = (id) => {
                 )} */}
 
                 {post.images && (
-  <div className="relative">
-    <img
-      src={Array.isArray(post.images) ? post.images[0] : post.images}
-      alt={post.title}
-      className="w-full h-60 object-cover"
-    />
-    <span
-      className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${
-        post.status === "approved"
-          ? "bg-green-500 text-green-700"
-          : post.status === "pending"
-          ? "bg-yellow-400 text-yellow-700"
-          : "bg-red-500 text-red-700"
-      }`}
-    >
-      {post.status}
-    </span>
-  </div>
-)}
+                  <div className="relative">
+                    <img
+                      src={Array.isArray(post.images) ? post.images[0] : post.images}
+                      alt={post.title}
+                      className="w-full h-60 object-cover"
+                    />
+                    <span
+                      className={`absolute top-2 right-2 text-xs px-2 py-1 rounded ${post.status === "approved"
+                          ? "bg-green-500 text-green-700"
+                          : post.status === "pending"
+                            ? "bg-yellow-400 text-yellow-700"
+                            : "bg-red-500 text-red-700"
+                        }`}
+                    >
+                      {post.status}
+                    </span>
+                  </div>
+                )}
 
                 <h3 className="text-xl font-semibold mb-2 text-gray-800 p-3">
                   {post.title}
@@ -272,12 +272,12 @@ const handleDelete = (id) => {
                 onChange={(e) => setSelectedFile(e.target.files[0])}
                 className="w-full border p-2 mb-3 rounded"
               />
-             {selectedPost?.images && ( 
-<img
-  src={Array.isArray(selectedPost.images) ? selectedPost.images[0] : selectedPost.images}
-  alt="Current"
-  className="w-full h-40 object-cover mb-3"
-/>
+              {selectedPost?.images && (
+                <img
+                  src={Array.isArray(selectedPost.images) ? selectedPost.images[0] : selectedPost.images}
+                  alt="Current"
+                  className="w-full h-40 object-cover mb-3"
+                />
               )}
               <div className="flex justify-end gap-2">
 
