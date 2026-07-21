@@ -108,7 +108,7 @@ export default function Login() {
   disabled={isSubmitting || loading }
   className="w-full rounded-md bg-indigo-500 py-2 text-white font-semibold hover:bg-indigo-400"
 >
-  {loading ? "Signing in..." : "Sign in"}
+  {loading ? "Logging in..." : "Log in"}
 </button>
 
 <div className="text-right mt-2">
