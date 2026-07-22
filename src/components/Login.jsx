@@ -24,11 +24,12 @@ export default function Login() {
 
   const initialValues = { email: "", password: "" };
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting, resetForm}) => {
     setSuccessMsg(""); // clear previous message
     dispatch(loginUser(values))
       .unwrap()
       .then((res) => {
+          resetForm(); // Clear form fields
         setSuccessMsg("Login successful ✅");
 
         // navigate after a short delay
@@ -65,12 +66,13 @@ export default function Login() {
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form className="space-y-5">
+              <Form autoComplete="off" className="space-y-5">
                 <div>
                   <label className="block text-sm text-gray-200">Email</label>
                   <Field
                     type="email"
                     name="email"
+                    autoComplete="off"
                     className="mt-2 block w-full rounded-md border border-white px-3 py-2 text-white"
                   />
                   <ErrorMessage
@@ -85,6 +87,7 @@ export default function Login() {
                   <Field
                     type="password"
                     name="password"
+                    autoComplete="new-password"
                     className="mt-2 block w-full rounded-md border border-white px-3 py-2 text-white"
                   />
                   <ErrorMessage
